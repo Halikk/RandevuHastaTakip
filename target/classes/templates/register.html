@@ -47,7 +47,7 @@
                                     <label for="specialization" class="form-label">Uzmanlık Alanı</label>
                                     <select th:field="*{specialization}" id="specialization" class="form-select">
                                         <option value="">Uzmanlık Alanı Seçiniz</option>
-                                        <option th:each="spec : ${T(com.randevu.model.Specialization).values()}"
+                                        <option th:each="spec : ${specializations}"
                                                 th:value="${spec}"
                                                 th:text="${spec.displayName}">
                                             Kardiyoloji

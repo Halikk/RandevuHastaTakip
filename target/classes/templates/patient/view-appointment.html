@@ -6,52 +6,119 @@
 <body>
     <div th:replace="~{layout/main :: body(content=~{::content})}">
         <div th:fragment="content">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h2 class="text-primary"><i class="fas fa-calendar-check me-2"></i>Randevu Detayı</h2>
+                    <p class="text-muted">Randevu bilgilerinizi görüntüleyin</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a th:href="@{/patient/dashboard}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Listeye Dön
+                    </a>
+                </div>
+            </div>
+            
             <div class="row justify-content-center">
-                <div class="col-md-8">
+                <div class="col-md-10">
                     <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4>Randevu Detayı</h4>
-                            <a th:href="@{/patient/dashboard}" class="btn btn-sm btn-secondary">Listeye Dön</a>
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Randevu Bilgileri</h5>
+                                <span th:if="${appointment.status.name() == 'PENDING'}" class="badge bg-warning text-dark">
+                                    <i class="fas fa-hourglass-half me-1"></i> Beklemede
+                                </span>
+                                <span th:if="${appointment.status.name() == 'APPROVED'}" class="badge bg-success">
+                                    <i class="fas fa-check-circle me-1"></i> Onaylandı
+                                </span>
+                                <span th:if="${appointment.status.name() == 'REJECTED'}" class="badge bg-danger">
+                                    <i class="fas fa-times-circle me-1"></i> Reddedildi
+                                </span>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <h6>Doktor Bilgileri</h6>
-                                    <p><strong>Ad Soyad:</strong> <span th:text="${appointment.doctor.fullName}">Dr. Ahmet Yılmaz</span></p>
-                                    <p><strong>Uzmanlık:</strong> <span th:text="${appointment.doctor.specialization != null ? appointment.doctor.specialization.displayName : ''}">Kardiyoloji</span></p>
+                                    <div class="card h-100 bg-light border-0">
+                                        <div class="card-body">
+                                            <h6 class="mb-3 text-primary"><i class="fas fa-user-md me-2"></i>Doktor Bilgileri</h6>
+                                            <div class="d-flex mb-3">
+                                                <div class="bg-white p-3 rounded-circle shadow-sm me-3">
+                                                    <i class="fas fa-user-md fa-2x text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <h5 class="mb-1" th:text="${appointment.doctor.fullName}">Dr. Ahmet Yılmaz</h5>
+                                                    <p class="text-muted mb-0" th:text="${appointment.doctor.specialization != null ? appointment.doctor.specialization.displayName : ''}">Kardiyoloji</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <h6>Randevu Bilgileri</h6>
-                                    <p><strong>Tarih ve Saat:</strong> <span th:text="${#temporals.format(appointment.appointmentDateTime, 'dd.MM.yyyy HH:mm')}">01.01.2023 14:30</span></p>
-                                    <p>
-                                        <strong>Durum:</strong> 
-                                        <span th:if="${appointment.status.name() == 'PENDING'}" class="badge bg-warning">Beklemede</span>
-                                        <span th:if="${appointment.status.name() == 'APPROVED'}" class="badge bg-success">Onaylandı</span>
-                                        <span th:if="${appointment.status.name() == 'REJECTED'}" class="badge bg-danger">Reddedildi</span>
-                                    </p>
+                                    <div class="card h-100 bg-light border-0">
+                                        <div class="card-body">
+                                            <h6 class="mb-3 text-primary"><i class="fas fa-calendar-alt me-2"></i>Randevu Detayları</h6>
+                                            <div class="mb-3 d-flex align-items-center">
+                                                <div class="bg-white p-2 rounded shadow-sm me-3">
+                                                    <i class="fas fa-calendar-day text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <small class="text-muted">Tarih</small>
+                                                    <p class="mb-0 fw-bold" th:text="${#temporals.format(appointment.appointmentDateTime, 'dd MMMM yyyy')}">01 Ocak 2023</p>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 d-flex align-items-center">
+                                                <div class="bg-white p-2 rounded shadow-sm me-3">
+                                                    <i class="fas fa-clock text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <small class="text-muted">Saat</small>
+                                                    <p class="mb-0 fw-bold" th:text="${#temporals.format(appointment.appointmentDateTime, 'HH:mm')}">14:30</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             
                             <div class="row" th:if="${appointment.status.name() == 'APPROVED' || appointment.status.name() == 'REJECTED'}">
                                 <div class="col-md-12">
-                                    <h6>Doktor Notları</h6>
-                                    <p th:if="${appointment.doctorNotes == null || appointment.doctorNotes.isEmpty()}" class="text-muted">
-                                        Henüz not eklenmemiş.
-                                    </p>
-                                    <div th:if="${appointment.doctorNotes != null && !appointment.doctorNotes.isEmpty()}"
-                                         class="p-3 border rounded bg-light" 
-                                         th:text="${appointment.doctorNotes}">
-                                        Doktor notları burada görünecek.
+                                    <div class="card bg-light border-0">
+                                        <div class="card-body">
+                                            <h6 class="mb-3 text-primary"><i class="fas fa-sticky-note me-2"></i>Doktor Notları</h6>
+                                            <div th:if="${appointment.doctorNotes == null || appointment.doctorNotes.isEmpty()}" class="alert alert-light text-center">
+                                                <i class="fas fa-info-circle me-2"></i> Henüz not eklenmemiş.
+                                            </div>
+                                            <div th:if="${appointment.doctorNotes != null && !appointment.doctorNotes.isEmpty()}"
+                                                class="p-4 border rounded bg-white shadow-sm" 
+                                                th:text="${appointment.doctorNotes}">
+                                                Doktor notları burada görünecek.
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="alert alert-info mt-4" th:if="${appointment.status.name() == 'PENDING'}">
-                                Randevunuz şu anda doktor onayı bekliyor. Onaylandığında veya reddedildiğinde bu sayfada durum güncellenecektir.
+                            <div class="alert alert-info mt-4 d-flex align-items-center" th:if="${appointment.status.name() == 'PENDING'}">
+                                <i class="fas fa-info-circle me-3 fs-4"></i>
+                                <div>
+                                    Randevunuz şu anda doktor onayı bekliyor. Onaylandığında veya reddedildiğinde bu sayfada durum güncellenecektir.
+                                </div>
                             </div>
                             
-                            <div class="alert alert-warning mt-4" th:if="${appointment.status.name() == 'REJECTED'}">
-                                Randevunuz reddedilmiştir. Yeni bir randevu almak için lütfen "Randevu Al" butonunu kullanınız.
+                            <div class="alert alert-warning mt-4 d-flex align-items-center" th:if="${appointment.status.name() == 'REJECTED'}">
+                                <i class="fas fa-exclamation-triangle me-3 fs-4"></i>
+                                <div>
+                                    Randevunuz reddedilmiştir. Yeni bir randevu almak için lütfen "Randevu Al" butonunu kullanınız.
+                                </div>
+                            </div>
+                            
+                            <div class="text-center mt-4" th:if="${appointment.status.name() == 'APPROVED'}">
+                                <div class="alert alert-success d-flex align-items-center">
+                                    <i class="fas fa-check-circle me-3 fs-4"></i>
+                                    <div>
+                                        Randevunuz onaylanmıştır. Belirtilen tarih ve saatte kliniğimizde olmanız gerekmektedir.
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

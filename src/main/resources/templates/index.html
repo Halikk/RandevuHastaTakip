@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{layout/main :: head}">
     <title>Home - Randevu Hasta Takip</title>
 </head>
@@ -10,10 +10,22 @@
                 <h1 class="display-4">Randevu ve Hasta Takip Sistemi</h1>
                 <p class="lead">Sağlık hizmetlerinizi kolayca yönetin. Randevu alın, takip edin ve sağlık kayıtlarınıza erişin.</p>
                 <hr class="my-4">
-                <p>Randevu alabilmek ve sağlık kayıtlarınızı görebilmek için giriş yapın. Hesabınız yoksa hemen kayıt olun.</p>
-                <div class="d-flex gap-2">
-                    <a th:href="@{/login}" class="btn btn-primary">Giriş Yap</a>
-                    <a th:href="@{/register}" class="btn btn-secondary">Kayıt Ol</a>
+                
+                <!-- Giriş yapmamış kullanıcılar için -->
+                <div sec:authorize="!isAuthenticated()">
+                    <p>Randevu alabilmek ve sağlık kayıtlarınızı görebilmek için giriş yapın. Hesabınız yoksa hemen kayıt olun.</p>
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/login}" class="btn btn-primary">Giriş Yap</a>
+                        <a th:href="@{/register}" class="btn btn-secondary">Kayıt Ol</a>
+                    </div>
+                </div>
+                
+                <!-- Giriş yapmış kullanıcılar için -->
+                <div sec:authorize="isAuthenticated()">
+                    <p>Hoş geldiniz! Panele giderek randevularınızı ve bilgilerinizi yönetebilirsiniz.</p>
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/dashboard}" class="btn btn-primary">Panele Git</a>
+                    </div>
                 </div>
             </div>
             
