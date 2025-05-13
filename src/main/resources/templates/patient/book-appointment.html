@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Randevu Al - Randevu Hasta Takip</title>
+</head>
+<body>
+    <div th:replace="~{layout/main :: body(content=~{::content})}">
+        <div th:fragment="content">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Randevu Al</h4>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${doctors.empty}" class="alert alert-warning">
+                                Henüz sistemde kayıtlı doktor bulunmamaktadır.
+                            </div>
+                            
+                            <form th:unless="${doctors.empty}" th:action="@{/patient/book-appointment}" method="post">
+                                <div class="mb-3">
+                                    <label for="doctorId" class="form-label">Doktor</label>
+                                    <select id="doctorId" name="doctorId" class="form-select" required>
+                                        <option value="">Doktor Seçiniz</option>
+                                        <option th:each="doctor : ${doctors}" 
+                                                th:value="${doctor.id}" 
+                                                th:text="${doctor.fullName + ' - ' + (doctor.specialization != null ? doctor.specialization.displayName : '')}">
+                                            Dr. Ahmet Yılmaz - Kardiyoloji
+                                        </option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="appointmentDate" class="form-label">Randevu Tarihi</label>
+                                    <input type="date" id="appointmentDate" name="appointmentDate" class="form-control" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="appointmentTime" class="form-label">Randevu Saati</label>
+                                    <select id="appointmentTime" name="appointmentTime" class="form-select" required>
+                                        <option value="">Saat Seçiniz</option>
+                                        <option value="09:00">09:00</option>
+                                        <option value="09:30">09:30</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="10:30">10:30</option>
+                                        <option value="11:00">11:00</option>
+                                        <option value="11:30">11:30</option>
+                                        <option value="13:00">13:00</option>
+                                        <option value="13:30">13:30</option>
+                                        <option value="14:00">14:00</option>
+                                        <option value="14:30">14:30</option>
+                                        <option value="15:00">15:00</option>
+                                        <option value="15:30">15:30</option>
+                                        <option value="16:00">16:00</option>
+                                        <option value="16:30">16:30</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between">
+                                    <a th:href="@{/patient/dashboard}" class="btn btn-secondary">İptal</a>
+                                    <button type="submit" class="btn btn-primary">Randevu Al</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Set min date to tomorrow
+                    const today = new Date();
+                    const tomorrow = new Date(today);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    
+                    const dateInput = document.getElementById('appointmentDate');
+                    dateInput.min = tomorrow.toISOString().split('T')[0];
+                    
+                    // Set max date to 30 days from now
+                    const maxDate = new Date(today);
+                    maxDate.setDate(maxDate.getDate() + 30);
+                    dateInput.max = maxDate.toISOString().split('T')[0];
+                });
+            </script>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Randevu Detayı - Randevu Hasta Takip</title>
+</head>
+<body>
+    <div th:replace="~{layout/main :: body(content=~{::content})}">
+        <div th:fragment="content">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4>Randevu Detayı</h4>
+                            <a th:href="@{/doctor/dashboard}" class="btn btn-sm btn-secondary">Listeye Dön</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <h6>Hasta Bilgileri</h6>
+                                    <p><strong>Ad Soyad:</strong> <span th:text="${appointment.patient.fullName}">Mehmet Yılmaz</span></p>
+                                    <p><strong>E-posta:</strong> <span th:text="${appointment.patient.email}">mehmet@ornek.com</span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Randevu Bilgileri</h6>
+                                    <p><strong>Tarih ve Saat:</strong> <span th:text="${#temporals.format(appointment.appointmentDateTime, 'dd.MM.yyyy HH:mm')}">01.01.2023 14:30</span></p>
+                                    <p>
+                                        <strong>Durum:</strong> 
+                                        <span th:if="${appointment.status.name() == 'PENDING'}" class="badge bg-warning">Beklemede</span>
+                                        <span th:if="${appointment.status.name() == 'APPROVED'}" class="badge bg-success">Onaylandı</span>
+                                        <span th:if="${appointment.status.name() == 'REJECTED'}" class="badge bg-danger">Reddedildi</span>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4" th:if="${appointment.status.name() == 'PENDING'}">
+                                <div class="col-md-12">
+                                    <h6>Randevu Durumunu Güncelle</h6>
+                                    <div class="d-flex gap-2">
+                                        <form th:action="@{/doctor/appointments/{id}/update-status(id=${appointment.id})}" method="post" style="display: inline;">
+                                            <input type="hidden" name="status" value="APPROVED">
+                                            <button type="submit" class="btn btn-success">Onayla</button>
+                                        </form>
+                                        
+                                        <form th:action="@{/doctor/appointments/{id}/update-status(id=${appointment.id})}" method="post" style="display: inline;">
+                                            <input type="hidden" name="status" value="REJECTED">
+                                            <button type="submit" class="btn btn-danger">Reddet</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h6>Doktor Notları</h6>
+                                    <p th:if="${appointment.doctorNotes == null || appointment.doctorNotes.isEmpty()}" class="text-muted">
+                                        Henüz not eklenmemiş.
+                                    </p>
+                                    <p th:if="${appointment.doctorNotes != null && !appointment.doctorNotes.isEmpty()}" th:text="${appointment.doctorNotes}">
+                                        Hasta notları burada görünecek.
+                                    </p>
+                                    
+                                    <form th:action="@{/doctor/appointments/{id}/add-notes(id=${appointment.id})}" method="post" class="mt-3">
+                                        <div class="mb-3">
+                                            <label for="notes" class="form-label">Not Ekle/Güncelle</label>
+                                            <textarea id="notes" name="notes" class="form-control" rows="4" th:text="${appointment.doctorNotes}"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

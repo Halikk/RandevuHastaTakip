@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Doktor Paneli - Randevu Hasta Takip</title>
+</head>
+<body>
+    <div th:replace="~{layout/main :: body(content=~{::content})}">
+        <div th:fragment="content">
+            <h2 class="mb-4">Doktor Paneli</h2>
+            
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Randevularım</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="nav nav-tabs mb-3" id="appointmentTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab">
+                                        Bekleyen Randevular
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="approved-tab" data-bs-toggle="tab" data-bs-target="#approved" type="button" role="tab">
+                                        Onaylananlar
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="rejected-tab" data-bs-toggle="tab" data-bs-target="#rejected" type="button" role="tab">
+                                        Reddedilenler
+                                    </button>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content" id="appointmentTabContent">
+                                <div class="tab-pane fade show active" id="pending" role="tabpanel">
+                                    <div th:if="${appointments.empty}" class="alert alert-info">
+                                        Bekleyen randevunuz bulunmamaktadır.
+                                    </div>
+                                    
+                                    <div th:if="${!appointments.empty}" class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Hasta</th>
+                                                    <th>Tarih ve Saat</th>
+                                                    <th>Durum</th>
+                                                    <th>İşlemler</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="appointment : ${appointments}" th:if="${appointment.status.name() == 'PENDING'}">
+                                                    <td th:text="${appointment.patient.fullName}">Mehmet Yılmaz</td>
+                                                    <td th:text="${#temporals.format(appointment.appointmentDateTime, 'dd.MM.yyyy HH:mm')}">01.01.2023 14:30</td>
+                                                    <td>
+                                                        <span class="badge bg-warning">Beklemede</span>
+                                                    </td>
+                                                    <td>
+                                                        <a th:href="@{/doctor/appointments/{id}(id=${appointment.id})}" class="btn btn-sm btn-info">Detaylar</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="approved" role="tabpanel">
+                                    <div th:if="${appointments.empty}" class="alert alert-info">
+                                        Onaylanmış randevunuz bulunmamaktadır.
+                                    </div>
+                                    
+                                    <div th:if="${!appointments.empty}" class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Hasta</th>
+                                                    <th>Tarih ve Saat</th>
+                                                    <th>Durum</th>
+                                                    <th>İşlemler</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="appointment : ${appointments}" th:if="${appointment.status.name() == 'APPROVED'}">
+                                                    <td th:text="${appointment.patient.fullName}">Mehmet Yılmaz</td>
+                                                    <td th:text="${#temporals.format(appointment.appointmentDateTime, 'dd.MM.yyyy HH:mm')}">01.01.2023 14:30</td>
+                                                    <td>
+                                                        <span class="badge bg-success">Onaylandı</span>
+                                                    </td>
+                                                    <td>
+                                                        <a th:href="@{/doctor/appointments/{id}(id=${appointment.id})}" class="btn btn-sm btn-info">Detaylar</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="rejected" role="tabpanel">
+                                    <div th:if="${appointments.empty}" class="alert alert-info">
+                                        Reddedilmiş randevunuz bulunmamaktadır.
+                                    </div>
+                                    
+                                    <div th:if="${!appointments.empty}" class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Hasta</th>
+                                                    <th>Tarih ve Saat</th>
+                                                    <th>Durum</th>
+                                                    <th>İşlemler</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="appointment : ${appointments}" th:if="${appointment.status.name() == 'REJECTED'}">
+                                                    <td th:text="${appointment.patient.fullName}">Mehmet Yılmaz</td>
+                                                    <td th:text="${#temporals.format(appointment.appointmentDateTime, 'dd.MM.yyyy HH:mm')}">01.01.2023 14:30</td>
+                                                    <td>
+                                                        <span class="badge bg-danger">Reddedildi</span>
+                                                    </td>
+                                                    <td>
+                                                        <a th:href="@{/doctor/appointments/{id}(id=${appointment.id})}" class="btn btn-sm btn-info">Detaylar</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

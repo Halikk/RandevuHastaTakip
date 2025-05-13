@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Kayıt Ol - Randevu Hasta Takip</title>
+</head>
+<body>
+    <div th:replace="~{layout/main :: body(content=~{::content})}">
+        <div th:fragment="content">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card mt-5">
+                        <div class="card-header">
+                            <h4>Kayıt Ol</h4>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/register}" method="post" th:object="${user}">
+                                <div class="mb-3">
+                                    <label for="fullName" class="form-label">Ad Soyad</label>
+                                    <input type="text" th:field="*{fullName}" id="fullName" class="form-control" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Kullanıcı Adı</label>
+                                    <input type="text" th:field="*{username}" id="username" class="form-control" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">E-posta</label>
+                                    <input type="email" th:field="*{email}" id="email" class="form-control" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Şifre</label>
+                                    <input type="password" th:field="*{password}" id="password" class="form-control" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="role" class="form-label">Kullanıcı Türü</label>
+                                    <select th:field="*{role}" id="role" class="form-select" required>
+                                        <option value="">Seçiniz</option>
+                                        <option th:value="'PATIENT'">Hasta</option>
+                                        <option th:value="'DOCTOR'">Doktor</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3" id="specializationField" style="display: none;">
+                                    <label for="specialization" class="form-label">Uzmanlık Alanı</label>
+                                    <select th:field="*{specialization}" id="specialization" class="form-select">
+                                        <option value="">Uzmanlık Alanı Seçiniz</option>
+                                        <option th:each="spec : ${T(com.randevu.model.Specialization).values()}"
+                                                th:value="${spec}"
+                                                th:text="${spec.displayName}">
+                                            Kardiyoloji
+                                        </option>
+                                    </select>
+                                </div>
+                                
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+                                </div>
+                            </form>
+                            
+                            <div class="mt-3 text-center">
+                                <p>Zaten hesabınız var mı? <a th:href="@{/login}">Giriş Yap</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const roleSelect = document.getElementById('role');
+                    const specializationField = document.getElementById('specializationField');
+                    
+                    roleSelect.addEventListener('change', function() {
+                        if (this.value === 'DOCTOR') {
+                            specializationField.style.display = 'block';
+                            document.getElementById('specialization').required = true;
+                        } else {
+                            specializationField.style.display = 'none';
+                            document.getElementById('specialization').required = false;
+                        }
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</body>
+</html> 

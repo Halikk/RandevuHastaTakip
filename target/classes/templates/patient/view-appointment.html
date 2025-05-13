@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Randevu Detayı - Randevu Hasta Takip</title>
+</head>
+<body>
+    <div th:replace="~{layout/main :: body(content=~{::content})}">
+        <div th:fragment="content">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4>Randevu Detayı</h4>
+                            <a th:href="@{/patient/dashboard}" class="btn btn-sm btn-secondary">Listeye Dön</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <h6>Doktor Bilgileri</h6>
+                                    <p><strong>Ad Soyad:</strong> <span th:text="${appointment.doctor.fullName}">Dr. Ahmet Yılmaz</span></p>
+                                    <p><strong>Uzmanlık:</strong> <span th:text="${appointment.doctor.specialization != null ? appointment.doctor.specialization.displayName : ''}">Kardiyoloji</span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Randevu Bilgileri</h6>
+                                    <p><strong>Tarih ve Saat:</strong> <span th:text="${#temporals.format(appointment.appointmentDateTime, 'dd.MM.yyyy HH:mm')}">01.01.2023 14:30</span></p>
+                                    <p>
+                                        <strong>Durum:</strong> 
+                                        <span th:if="${appointment.status.name() == 'PENDING'}" class="badge bg-warning">Beklemede</span>
+                                        <span th:if="${appointment.status.name() == 'APPROVED'}" class="badge bg-success">Onaylandı</span>
+                                        <span th:if="${appointment.status.name() == 'REJECTED'}" class="badge bg-danger">Reddedildi</span>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="row" th:if="${appointment.status.name() == 'APPROVED' || appointment.status.name() == 'REJECTED'}">
+                                <div class="col-md-12">
+                                    <h6>Doktor Notları</h6>
+                                    <p th:if="${appointment.doctorNotes == null || appointment.doctorNotes.isEmpty()}" class="text-muted">
+                                        Henüz not eklenmemiş.
+                                    </p>
+                                    <div th:if="${appointment.doctorNotes != null && !appointment.doctorNotes.isEmpty()}"
+                                         class="p-3 border rounded bg-light" 
+                                         th:text="${appointment.doctorNotes}">
+                                        Doktor notları burada görünecek.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-info mt-4" th:if="${appointment.status.name() == 'PENDING'}">
+                                Randevunuz şu anda doktor onayı bekliyor. Onaylandığında veya reddedildiğinde bu sayfada durum güncellenecektir.
+                            </div>
+                            
+                            <div class="alert alert-warning mt-4" th:if="${appointment.status.name() == 'REJECTED'}">
+                                Randevunuz reddedilmiştir. Yeni bir randevu almak için lütfen "Randevu Al" butonunu kullanınız.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

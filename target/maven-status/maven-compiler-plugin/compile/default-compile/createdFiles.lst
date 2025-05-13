@@ -1,0 +1,14 @@
+com\randevu\model\User.class
+com\randevu\controller\DoctorController.class
+com\randevu\model\Appointment$Status.class
+com\randevu\model\Appointment.class
+com\randevu\controller\AuthController.class
+com\randevu\service\CustomUserDetailsService.class
+com\randevu\RandevuHastaTakipApplication.class
+com\randevu\model\User$Role.class
+com\randevu\repository\AppointmentRepository.class
+com\randevu\service\UserService.class
+com\randevu\service\AppointmentService.class
+com\randevu\controller\PatientController.class
+com\randevu\repository\UserRepository.class
+com\randevu\config\SecurityConfig.class

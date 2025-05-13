@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Home - Randevu Hasta Takip</title>
+</head>
+<body>
+    <div th:replace="~{layout/main :: body(content=~{::content})}">
+        <div th:fragment="content">
+            <div class="jumbotron mt-5">
+                <h1 class="display-4">Randevu ve Hasta Takip Sistemi</h1>
+                <p class="lead">Sağlık hizmetlerinizi kolayca yönetin. Randevu alın, takip edin ve sağlık kayıtlarınıza erişin.</p>
+                <hr class="my-4">
+                <p>Randevu alabilmek ve sağlık kayıtlarınızı görebilmek için giriş yapın. Hesabınız yoksa hemen kayıt olun.</p>
+                <div class="d-flex gap-2">
+                    <a th:href="@{/login}" class="btn btn-primary">Giriş Yap</a>
+                    <a th:href="@{/register}" class="btn btn-secondary">Kayıt Ol</a>
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Hastalar İçin</h5>
+                            <p class="card-text">Kolayca randevu alın, geçmiş randevularınızı görüntüleyin ve doktor notlarına erişin.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Doktorlar İçin</h5>
+                            <p class="card-text">Randevularınızı yönetin, hastaların bilgilerine erişin ve notlar ekleyin.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Kolay Kullanım</h5>
+                            <p class="card-text">Kullanıcı dostu arayüz ile sağlık hizmetlerinizi yönetmenin en kolay yolu.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
